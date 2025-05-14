@@ -1,0 +1,12 @@
+# Ignora todo por defecto
+*
+
+# Pero no ignores estos archivos/carpetas:
+!/.gitignore
+!/src/
+!/public/
+!/package.json
+!/package-lock.json
+!/vite.config.js
+!/index.html
+!/README.md
