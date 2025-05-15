@@ -2,10 +2,11 @@
   "name": "mi-app-react",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://Let-so.github.io/React-TP",  
+  "homepage": "https://Let-so.github.io/React-TP",
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^4.2.4"
   },

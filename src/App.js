@@ -1,68 +1,103 @@
-// src/App.js
-import React, { useState, useEffect } from 'react';
-import AdvancedOptions       from './AdvancedOptions';
-import PasswordInput         from './PasswordInput';
-import PasswordStrengthMeter from './PasswordStrengthMeter';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import {
+  FaCopy,
+  FaSyncAlt,
+  FaCogs,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
+import PasswordStrengthMeter from "./PasswordStrengthMeter";
+import AdvancedOptions from "./AdvancedOptions";
+import "./App.css";
 
 function App() {
-  // estados principales
-  const [password, setPassword]       = useState('');
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [options, setOptions]         = useState({
+  const [strength, setStrength] = useState("");
+  const [copyMessage, setCopyMessage] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [options, setOptions] = useState({
     length: 8,
     includeLowercase: true,
     includeUppercase: true,
     includeNumbers: true,
-    includeSpecial: false
+    includeSpecial: false,
   });
-  const [strength, setStrength]       = useState('Baja');
 
-  // efecto que recalcula la fortaleza cuando cambia la password u opciones
+  // Evalua fortaleza de la contraseña
   useEffect(() => {
-    let score = 0;
+    if (password.length < 6) return setStrength("Poco segura");
+    const hasLower = /[a-z]/.test(password);
+    const hasUpper = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    // largo
-    score += password.length >= options.length ? 1 : 0;
-    // minúsculas
-    if (options.includeLowercase && /[a-z]/.test(password)) score++;
-    // mayúsculas
-    if (options.includeUppercase && /[A-Z]/.test(password)) score++;
-    // números
-    if (options.includeNumbers && /\d/.test(password)) score++;
-    // especiales
-    if (options.includeSpecial && /[^A-Za-z0-9]/.test(password)) score++;
-
-    // mapeo puntuación → texto
-    if (score >= 4) {
-      setStrength('Alta');
-    } else if (score >= 2) {
-      setStrength('Media');
+    if (password.length >= 8 && hasLower && hasUpper && hasNumber && hasSpecial) {
+      setStrength("Muy segura");
     } else {
-      setStrength('Baja');
+      setStrength("Segura");
     }
-  }, [password, options]);
+  }, [password]);
+
+  // Copiar al portapapeles
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(password).then(() => {
+      setCopyMessage("¡Contraseña copiada!");
+      setTimeout(() => setCopyMessage(""), 3000);
+    });
+  };
+
+  // Generar contraseña aleatoria
+  const generatePassword = () => {
+    let charset = "";
+    if (options.includeLowercase) charset += "abcdefghijklmnopqrstuvwxyz";
+    if (options.includeUppercase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (options.includeNumbers) charset += "0123456789";
+    if (options.includeSpecial) charset += "!@#$%^&*(),.?\":{}|<>";
+    if (!charset) return alert("Selecciona al menos un tipo de carácter.");
+
+    let gen = "";
+    for (let i = 0; i < options.length; i++) {
+      gen += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    setPassword(gen);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Generador de Contraseñas</h1>
-      </header>
-      <main style={{ padding: '1rem' }}>
-        <PasswordInput
-          password={password}
-          setPassword={setPassword}
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
-        />
+    <div className="container">
+      <h1 className="main-title">Fortaleza de Contraseña</h1>
 
-        <AdvancedOptions
-          options={options}
-          setOptions={setOptions}
-        />
+      <div className="input-group">
+        <label>Contraseña:</label>
+        <div className="input-wrapper">
+          <FaLock />
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            placeholder="Ingresa tu contraseña"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button onClick={() => setShowPassword((v) => !v)}>
+          {showPassword ? <><FaEyeSlash /> Ocultar</> : <><FaEye /> Mostrar</>}
+        </button>
+      </div>
+        <PasswordStrengthMeter strength={strength} password={password} />
 
-        <PasswordStrengthMeter strength={strength} />
-      </main>
+      {copyMessage && <div className="copy-message">{copyMessage}</div>}
+
+      <div className="button-group">
+        <button onClick={copyToClipboard}><FaCopy /> Copiar</button>
+        <button onClick={generatePassword}><FaSyncAlt /> Generar</button>
+        <button onClick={() => setShowAdvanced((v) => !v)}><FaCogs /> Opciones</button>
+      </div>
+
+      {showAdvanced && (
+        <div className="advanced-options">
+          <AdvancedOptions options={options} setOptions={setOptions} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,84 +1,73 @@
-// OpcionesAvanzadas.jsx
-import React from 'react';
+// src/AdvancedOptions.js
+import React from "react";
 
-function OpcionesAvanzadas({ opciones, setOpciones }) {
-
-  function cambiarCasilla(e) {
-    const { name, checked } = e.target;
-    setOpciones({ ...opciones, [name]: checked });
-  }
-
-  function cambiarLargo(e) {
-    setOpciones({ ...opciones, length: parseInt(e.target.value) });
-  }
+export default function AdvancedOptions({ options, setOptions }) {
+  const handleChange = (e) => {
+    const { name, type, checked, value } = e.target;
+    setOptions({
+      ...options,
+      [name]: type === "checkbox" ? checked : parseInt(value),
+    });
+  };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '5px' }}>
-      <h3>Opciones Avanzadas</h3>
-
-      <div>
-        <label>
-          Largo de la contraseña: 
-          <input 
-            type="number" 
-            name="length" 
-            value={opciones.length} 
-            min="4" 
-            onChange={cambiarLargo} 
-            style={{ marginLeft: '0.5rem', width: '50px' }}
+    <div>
+      <h4>Opciones Avanzadas</h4>
+      <div className="content">
+        {/* Fila de longitud abarcando 2 columnas */}
+        <div className="option-row length-row">
+          <label htmlFor="length">Longitud:</label>
+          <input
+            type="number"
+            id="length"
+            name="length"
+            min="4"
+            value={options.length}
+            onChange={handleChange}
           />
-        </label>
-      </div>
+        </div>
 
-      <div>
-        <label>
-          <input 
-            type="checkbox" 
-            name="includeLowercase" 
-            checked={opciones.includeLowercase} 
-            onChange={cambiarCasilla} 
+        {/* Las siguientes filas entran en dos columnas */}
+        <label className="option-row">
+          <input
+            type="checkbox"
+            name="includeLowercase"
+            checked={options.includeLowercase}
+            onChange={handleChange}
           />
-          Incluir minúsculas
+          Incluir letras minúsculas
         </label>
-      </div>
 
-      <div>
-        <label>
-          <input 
-            type="checkbox" 
-            name="includeUppercase" 
-            checked={opciones.includeUppercase} 
-            onChange={cambiarCasilla} 
+        <label className="option-row">
+          <input
+            type="checkbox"
+            name="includeUppercase"
+            checked={options.includeUppercase}
+            onChange={handleChange}
           />
-          Incluir mayúsculas
+          Incluir letras mayúsculas
         </label>
-      </div>
 
-      <div>
-        <label>
-          <input 
-            type="checkbox" 
-            name="includeNumbers" 
-            checked={opciones.includeNumbers} 
-            onChange={cambiarCasilla} 
+        <label className="option-row">
+          <input
+            type="checkbox"
+            name="includeNumbers"
+            checked={options.includeNumbers}
+            onChange={handleChange}
           />
           Incluir números
         </label>
-      </div>
 
-      <div>
-        <label>
-          <input 
-            type="checkbox" 
-            name="includeSpecial" 
-            checked={opciones.includeSpecial} 
-            onChange={cambiarCasilla} 
+        <label className="option-row">
+          <input
+            type="checkbox"
+            name="includeSpecial"
+            checked={options.includeSpecial}
+            onChange={handleChange}
           />
-          Incluir símbolos
+          Incluir caracteres especiales
         </label>
       </div>
     </div>
   );
 }
-
-export default OpcionesAvanzadas;
