@@ -2,7 +2,7 @@
   "name": "mi-app-react",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://Let-so.github.io/Mi-app-react",
+  "homepage": "https://Let-so.github.io/React-TP",
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

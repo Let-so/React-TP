@@ -1,12 +1,12 @@
-# Ignora todo por defecto
-*
+# Dependencias de Node
+node_modules/
 
-# Pero no ignores estos archivos/carpetas:
-!/.gitignore
-!/src/
-!/public/
-!/package.json
-!/package-lock.json
-!/vite.config.js
-!/index.html
-!/README.md
+# Variables de entorno
+.env
+
+# Salida de build o dist
+dist/
+build/
+
+# Logs
+*.log
