@@ -95,10 +95,11 @@ function App() {
 
       {showAdvanced && (
         <div className="advanced-options">
-          <AdvancedOptions options={options} setOptions={setOptions} />
+         <AdvancedOptions options={options} setOptions={setOptions} />
         </div>
       )}
     </div>
+    
   );
 }
 
